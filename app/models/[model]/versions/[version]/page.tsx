@@ -1,17 +1,18 @@
 'use client'
 
 import React, { useEffect, useState } from 'react';
-import { CircularProgress, Container, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
+import { Box, CircularProgress, Container, Paper, Stack, Tab, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tabs, Typography } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { useRouter } from 'next/navigation';
 
 function ModelView({ params }: { params: { model: string, version: string } }) {
   const router = useRouter();
   const { model, version } = params;
-  const [config, setConfig] = useState<any>(null);
+  const [config, setConfig] = useState<Record<string, any>>({});
   const [stats, setStats] = useState<Record<string, any>>({});
   const [loading, setLoading] = useState<boolean>(true);
   const [isUnloading, setIsUnloading] = useState(false);
+  const [activeTab, setActiveTab] = useState<number>(0);
 
   const handleUnload = async () => {
     setIsUnloading(true);
@@ -48,8 +49,14 @@ function ModelView({ params }: { params: { model: string, version: string } }) {
           </Stack>
 
           <div>
-            <Typography variant="h5" component="h2" gutterBottom>Stats</Typography>
-            <TableContainer component={Paper}>
+            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+              <Tabs value={activeTab} onChange={(e, newValue) => setActiveTab(newValue)}>
+                <Tab label="Stats" />
+                <Tab label="Config" />
+              </Tabs>
+            </Box>
+
+            <TableContainer component={Paper} hidden={activeTab !== 0}>
               <Table>
                 <TableHead>
                   <TableRow>
@@ -69,11 +76,8 @@ function ModelView({ params }: { params: { model: string, version: string } }) {
                 </TableBody>
               </Table>
             </TableContainer>
-          </div>
 
-          <div>
-            <Typography variant="h5" component="h2" gutterBottom>Config</Typography>
-            <TableContainer component={Paper}>
+            <TableContainer component={Paper} hidden={activeTab !== 1}>
               <Table>
                 <TableHead>
                   <TableRow>

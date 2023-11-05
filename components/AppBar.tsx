@@ -10,7 +10,9 @@ export default function Navigation() {
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Triton Inference Server Web UI
+            <Link href="/">
+              Triton Inference Server Web UI
+            </Link>
           </Typography>
 
           <Link href="/repo">
