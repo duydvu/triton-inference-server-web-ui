@@ -3,10 +3,13 @@
 import React, { useState } from 'react';
 import { Model } from '@/types/model';
 import Link from 'next/link';
-import { Button, Chip, CircularProgress, TableCell, TableRow } from '@mui/material';
+import { Button, Chip, TableCell, TableRow } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
+import EditIcon from '@mui/icons-material/Edit';
+import { useRouter } from 'next/navigation';
 
 function ModelItem({ model, update }: { model: Model, update: () => Promise<void> }) {
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [isUnloading, setIsUnloading] = useState(false);
 
@@ -62,16 +65,27 @@ function ModelItem({ model, update }: { model: Model, update: () => Promise<void
           {isReady ? 'Reload' : 'Load'}
         </LoadingButton>
         {isReady && (
-          <LoadingButton
-            onClick={handleUnload}
-            variant="contained"
-            color="warning"
-            className="ml-4"
-            disabled={isLoading}
-            loading={isUnloading}
-          >
-            Unload
-          </LoadingButton>
+          <>
+            <Button
+              variant="contained"
+              color="primary"
+              className="ml-4"
+              onClick={() => router.push(`/models/${model.name}/versions/${model.version}/edit`)}
+              startIcon={<EditIcon />}
+            >
+              Edit
+            </Button>
+            <LoadingButton
+              onClick={handleUnload}
+              variant="contained"
+              color="warning"
+              className="ml-4"
+              disabled={isLoading}
+              loading={isUnloading}
+            >
+              Unload
+            </LoadingButton>
+          </>
         )}
       </TableCell>
     </TableRow>
