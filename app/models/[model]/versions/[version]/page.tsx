@@ -1,9 +1,10 @@
 'use client'
 
 import React, { useEffect, useState } from 'react';
-import { Box, CircularProgress, Container, Paper, Stack, Tab, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tabs, Typography } from '@mui/material';
+import { Box, Button, CircularProgress, Container, Paper, Stack, Tab, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tabs, Typography } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { useRouter } from 'next/navigation';
+import EditIcon from '@mui/icons-material/Edit';
 
 function ModelView({ params }: { params: { model: string, version: string } }) {
   const router = useRouter();
@@ -43,9 +44,19 @@ function ModelView({ params }: { params: { model: string, version: string } }) {
         <Stack spacing={4}>
           <Stack direction="row" justifyContent="space-between" alignItems="center">
             <Typography variant="h4" component="h1">{config.name}</Typography>
-            <LoadingButton onClick={handleUnload} loading={isUnloading} variant="contained" color="error">
-              Unload
-            </LoadingButton>
+            <Stack direction="row" spacing={2}>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => router.push(`/models/${model}/versions/${version}/edit`)}
+                startIcon={<EditIcon />}
+              >
+                Edit
+              </Button>
+              <LoadingButton onClick={handleUnload} loading={isUnloading} variant="contained" color="error">
+                Unload
+              </LoadingButton>
+            </Stack>
           </Stack>
 
           <div>
