@@ -1,7 +1,9 @@
 'use client'
 
 import ModelItem from '@/components/ModelItem';
+import TableRowsLoader from '@/components/TableRowsLoader';
 import { Model } from '@/types/model';
+import { Container, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 
 function App() {
@@ -23,28 +25,28 @@ function App() {
   }, []);
 
   return (
-    <div className="flex flex-col items-center justify-center py-10">
-      <h1 className="text-3xl font-bold">Models</h1>
-      {loading ? (
-        <p className="mt-10">Loading...</p>
-      ) : (
-        <table className="table-auto w-full max-w-5xl mt-10">
-          <thead>
-            <tr>
-              <th className="p-4 border-b border-gray-200 text-left">Name</th>
-              <th className="p-4 border-b border-gray-200">Version</th>
-              <th className="p-4 border-b border-gray-200">Status</th>
-              <th className="p-4 border-b border-gray-200">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {models.map((model, i) => (
+    <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+      <Typography variant="h5" gutterBottom>Models</Typography>
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Name</TableCell>
+              <TableCell>Version</TableCell>
+              <TableCell>Status</TableCell>
+              <TableCell>Action</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {loading ? (
+              <TableRowsLoader rowsNum={3} columnsNum={4} />
+            ) : models.map((model, i) => (
               <ModelItem key={i} model={model} update={getModels} />
             ))}
-          </tbody>
-        </table>
-      )}
-    </div>
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Container>
   );
 }
 

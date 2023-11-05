@@ -3,6 +3,8 @@
 import React, { useState } from 'react';
 import { Model } from '@/types/model';
 import Link from 'next/link';
+import { Button, Chip, CircularProgress, TableCell, TableRow } from '@mui/material';
+import LoadingButton from '@mui/lab/LoadingButton';
 
 function ModelItem({ model, update }: { model: Model, update: () => Promise<void> }) {
   const [isLoading, setIsLoading] = useState(false);
@@ -32,44 +34,43 @@ function ModelItem({ model, update }: { model: Model, update: () => Promise<void
 
   const isReady = model.state === 'READY';
 
-  const badgeColor = isReady ? 'bg-green-500' : 'bg-red-500';
+  const badgeColor = isReady ? 'success' : 'error';
   const badgeText = isReady ? 'Ready' : 'Not Ready';
 
   return (
-    <tr>
-      <td className="p-4 border-b border-gray-200">
-        <p className="text-sm font-bold">
-          <Link href={`/models/${model.name}/versions/${model.version}`}>
-            {model.name}
-          </Link>
-        </p>
-      </td>
-      <td className="p-4 border-b border-gray-200 text-center">
-        <p className="text-sm">{model.version}</p>
-      </td>
-      <td className="p-4 border-b border-gray-200 text-center">
-        <div className={`py-1 px-2 rounded text-white ${badgeColor} inline-block`}>
-          <p className="text-xs">{badgeText}</p>
-        </div>
-      </td>
-      <td className="p-4 border-b border-gray-200 text-right">
-        <button
+    <TableRow>
+      <TableCell>
+        <Link href={`/models/${model.name}/versions/${model.version}`} className='text-blue-500 hover:underline'>
+          {model.name}
+        </Link>
+      </TableCell>
+      <TableCell>{model.version}</TableCell>
+      <TableCell>
+        <Chip color={badgeColor} label={badgeText} clickable />
+      </TableCell>
+      <TableCell>
+        <LoadingButton
           onClick={handleLoad}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-sm"
-          disabled={isLoading}
+          variant="contained"
+          disabled={isUnloading}
+          loading={isLoading}
         >
-          {isLoading ? 'Loading...' : isReady ? 'Reload' : 'Load'}
-        </button>
+          {isReady ? 'Reload' : 'Load'}
+        </LoadingButton>
         {isReady && (
-          <button
+          <LoadingButton
             onClick={handleUnload}
-            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded text-sm ml-4"
+            variant="contained"
+            color="warning"
+            className="ml-4"
+            disabled={isLoading}
+            loading={isUnloading}
           >
-            {isUnloading ? 'Unloading...' : 'Unload'}
-          </button>
+            Unload
+          </LoadingButton>
         )}
-      </td>
-    </tr>
+      </TableCell>
+    </TableRow>
   );
 }
 
