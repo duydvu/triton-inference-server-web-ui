@@ -40,9 +40,13 @@ function ModelItem({ model, update }: { model: Model, update: () => Promise<void
   return (
     <TableRow>
       <TableCell>
-        <Link href={`/models/${model.name}/versions/${model.version}`} className='text-blue-500 hover:underline'>
-          {model.name}
-        </Link>
+        {isReady && model.version ? (
+          <Link href={`/models/${model.name}/versions/${model.version}`} className='text-blue-500 hover:underline'>
+            {model.name}
+          </Link>
+        ) : (
+          model.name
+        )}
       </TableCell>
       <TableCell>{model.version}</TableCell>
       <TableCell>
