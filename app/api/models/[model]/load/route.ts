@@ -5,9 +5,16 @@ export async function POST(
   { params }: { params: { model: string } }
 ) {
   const { model } = params;
+  let body: any;
+  try {
+    body = await request.json();
+  } catch (err) {}
 
   try {
-    const res = await fetchServer(`v2/repository/models/${model}/load`, { method: 'POST' });
+    const res = await fetchServer(`v2/repository/models/${model}/load`, {
+      method: 'POST',
+      ...(body && { body: JSON.stringify(body) }),
+    });
 
     if (!res.ok) {
       const error = await res.text();

@@ -10,15 +10,39 @@ import CancelIcon from '@mui/icons-material/Cancel';
 function ModelView({ params }: { params: { model: string, version: string } }) {
   const router = useRouter();
   const { model, version } = params;
-  const [config, setConfig] = useState<Record<string, any>>({});
+  const [config, setConfig] = useState<string>('');
+  const [saving, setSaving] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
+
+  const save = async () => {
+    try {
+      setSaving(true);
+      const res = await fetch(`/api/models/${model}/load`, {
+        method: 'POST',
+        body: JSON.stringify({
+          parameters: {
+            config,
+          },
+        }),
+      });
+
+      if (!res.ok) {
+        throw new Error(await res.text());
+      }
+
+      router.push(`/models/${model}/versions/${version}`);
+    } catch (err) {
+      console.error(err);
+    }
+    setSaving(false);
+  }
 
   useEffect(() => {
     (async () => {
       setLoading(true);
       const res = await fetch(`/api/models/${model}/versions/${version}`);
       const { config } = await res.json();
-      setConfig(config);
+      setConfig(JSON.stringify(config, null, 4));
       setLoading(false);
     })()
   }, [model, version]);
@@ -29,15 +53,17 @@ function ModelView({ params }: { params: { model: string, version: string } }) {
       {!loading && config && (
         <Stack spacing={4}>
           <Stack direction="row" justifyContent="space-between" alignItems="center">
-            <Typography variant="h4" component="h1">{config.name}</Typography>
+            <Typography variant="h4" component="h1">{model}</Typography>
             <Stack direction="row" spacing={2}>
-              <Button
+              <LoadingButton
                 variant="contained"
                 color="primary"
                 startIcon={<SaveIcon />}
+                loading={saving}
+                onClick={save}
               >
                 Save
-              </Button>
+              </LoadingButton>
               <Button
                 variant="contained"
                 color="error"
@@ -53,7 +79,8 @@ function ModelView({ params }: { params: { model: string, version: string } }) {
             label="Config"
             multiline
             rows={30}
-            value={JSON.stringify(config, null, 4)}
+            value={config}
+            onChange={(e) => setConfig(e.target.value)}
           />
         </Stack>
       )}
