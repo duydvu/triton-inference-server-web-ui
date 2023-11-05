@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { Model } from '@/types/model';
+import Link from 'next/link';
 
 function ModelItem({ model, update }: { model: Model, update: () => Promise<void> }) {
   const [isLoading, setIsLoading] = useState(false);
@@ -37,7 +38,11 @@ function ModelItem({ model, update }: { model: Model, update: () => Promise<void
   return (
     <tr>
       <td className="p-4 border-b border-gray-200">
-        <p className="text-sm font-bold">{model.name}</p>
+        <p className="text-sm font-bold">
+          <Link href={`/models/${model.name}/versions/${model.version}`}>
+            {model.name}
+          </Link>
+        </p>
       </td>
       <td className="p-4 border-b border-gray-200 text-center">
         <p className="text-sm">{model.version}</p>
