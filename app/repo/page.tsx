@@ -1,40 +1,49 @@
-import fetchServer from '@/api/server';
+'use client'
+
 import ModelItem from '@/components/ModelItem';
 import { Model } from '@/types/model';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
-async function getModels(): Promise<Model[]> {
-  const response = await fetchServer('v2/repository/index', {
-    method: 'POST',
-  });
+function App() {
+  const [models, setModels] = useState<Model[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
-  if (!response.ok) {
-    throw new Error('Failed to fetch models');
+  async function getModels() {
+    const res = await fetch('/api/models', { method: 'POST' });
+    const models = await res.json();
+    setModels(models);
   }
-  return response.json();
-}
 
-async function App() {
-  const models = await getModels();
+  useEffect(() => {
+    (async () => {
+      setLoading(true);
+      await getModels();
+      setLoading(false);
+    })()
+  }, []);
 
   return (
     <div className="flex flex-col items-center justify-center py-10">
       <h1 className="text-3xl font-bold">Models</h1>
-      <table className="table-auto w-full max-w-5xl mt-10">
-        <thead>
-          <tr>
-            <th className="p-4 border-b border-gray-200 text-left">Name</th>
-            <th className="p-4 border-b border-gray-200">Version</th>
-            <th className="p-4 border-b border-gray-200">Status</th>
-            <th className="p-4 border-b border-gray-200">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {models.map((model, i) => (
-            <ModelItem key={i} model={model} />
-          ))}
-        </tbody>
-      </table>
+      {loading ? (
+        <p className="mt-10">Loading...</p>
+      ) : (
+        <table className="table-auto w-full max-w-5xl mt-10">
+          <thead>
+            <tr>
+              <th className="p-4 border-b border-gray-200 text-left">Name</th>
+              <th className="p-4 border-b border-gray-200">Version</th>
+              <th className="p-4 border-b border-gray-200">Status</th>
+              <th className="p-4 border-b border-gray-200">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {models.map((model, i) => (
+              <ModelItem key={i} model={model} update={getModels} />
+            ))}
+          </tbody>
+        </table>
+      )}
     </div>
   );
 }

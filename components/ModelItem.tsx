@@ -3,29 +3,36 @@
 import React, { useState } from 'react';
 import { Model } from '@/types/model';
 
-function ModelItem({ model }: { model: Model }) {
+function ModelItem({ model, update }: { model: Model, update: () => Promise<void> }) {
   const [isLoading, setIsLoading] = useState(false);
+  const [isUnloading, setIsUnloading] = useState(false);
 
-  const handleLoadClick = () => {
+  const handleLoad = async () => {
     setIsLoading(true);
-    fetch(`v2/repository/models/${model.name}/load`, { method: 'POST' })
-      .then(res => res.json())
-      .then(data => console.log(data))
-      .catch(err => console.error(err))
-      .finally(() => setIsLoading(false));
+    try {
+      const res = await fetch(`/api/models/${model.name}/load`, { method: 'POST' });
+    } catch (err) {
+      console.error(err);
+    }
+    await update();
+    setIsLoading(false);
   };
 
-  const handleUnloadClick = () => {
-    setIsLoading(true);
-    fetch(`v2/repository/models/${model.name}/unload`, { method: 'POST' })
-      .then(res => res.json())
-      .then(data => console.log(data))
-      .catch(err => console.error(err))
-      .finally(() => setIsLoading(false));
+  const handleUnload = async () => {
+    setIsUnloading(true);
+    try {
+      const res = await fetch(`/api/models/${model.name}/unload`, { method: 'POST' });
+    } catch (err) {
+      console.error(err);
+    }
+    await update();
+    setIsUnloading(false);
   };
 
-  const badgeColor = model.state === 'READY' ? 'bg-green-500' : 'bg-red-500';
-  const badgeText = model.state === 'READY' ? 'Ready' : 'Not Ready';
+  const isReady = model.state === 'READY';
+
+  const badgeColor = isReady ? 'bg-green-500' : 'bg-red-500';
+  const badgeText = isReady ? 'Ready' : 'Not Ready';
 
   return (
     <tr>
@@ -40,20 +47,20 @@ function ModelItem({ model }: { model: Model }) {
           <p className="text-xs">{badgeText}</p>
         </div>
       </td>
-      <td className="p-4 border-b border-gray-200 text-center">
-        {model.state === 'READY' ? (
+      <td className="p-4 border-b border-gray-200 text-right">
+        <button
+          onClick={handleLoad}
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-sm"
+          disabled={isLoading}
+        >
+          {isLoading ? 'Loading...' : isReady ? 'Reload' : 'Load'}
+        </button>
+        {isReady && (
           <button
-            onClick={handleLoadClick}
-            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded text-sm"
+            onClick={handleUnload}
+            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded text-sm ml-4"
           >
-            Unload
-          </button>
-        ) : (
-          <button
-            onClick={handleUnloadClick}
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-sm"
-          >
-            Load
+            {isUnloading ? 'Unloading...' : 'Unload'}
           </button>
         )}
       </td>
