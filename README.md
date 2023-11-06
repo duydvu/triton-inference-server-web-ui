@@ -1,13 +1,16 @@
 # Triton Inference Server Web UI
 
-Manage and monitor your Triton Inference Server with a web browser.
+Manage and monitor your Triton Inference Server with a web browser. You can use this project to develop and test your models on Triton Inference Server more easily. It is also useful for monitoring your models in production but it is not recommended to edit model configuration in production since it will be lost when the server restarts.
+
+This project is built on top of Triton Inference Server HTTP API. It is not affiliated with NVIDIA.
 
 ![](resources/screenshot_repo.jpeg)
+![](resources/screenshot_model.jpeg)
 
 ## Features
 - List all models from the model repository.
 - Easily load/unload models from the model repository.
-- Edit model configuration on the fly.
+- View & edit model configuration on the fly.
 - Monitor models metrics.
 
 ## Installation
