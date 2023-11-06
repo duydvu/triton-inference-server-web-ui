@@ -1,0 +1,18 @@
+# dependencies
+/node_modules
+
+# local env files
+.env*.local
+.env
+
+# git
+.git/
+.gitignore
+
+# next.js
+/.next
+/out
+
+# IDE
+.idea
+.vscode
