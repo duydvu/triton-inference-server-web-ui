@@ -36,9 +36,7 @@ function ModelItem({ model, update }: { model: Model, update: () => Promise<void
   };
 
   const isReady = model.state === 'READY';
-
   const badgeColor = isReady ? 'success' : 'error';
-  const badgeText = isReady ? 'Ready' : 'Not Ready';
 
   return (
     <TableRow>
@@ -53,7 +51,7 @@ function ModelItem({ model, update }: { model: Model, update: () => Promise<void
       </TableCell>
       <TableCell>{model.version}</TableCell>
       <TableCell>
-        <Chip color={badgeColor} label={badgeText} clickable />
+        {model.state && <Chip color={badgeColor} label={model.state} clickable />}
       </TableCell>
       <TableCell>{model.reason}</TableCell>
       <TableCell>
