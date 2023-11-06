@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { Model } from '@/types/model';
 import Link from 'next/link';
-import { Button, Chip, TableCell, TableRow } from '@mui/material';
+import { Button, Chip, Stack, TableCell, TableRow } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
 import EditIcon from '@mui/icons-material/Edit';
 import { useRouter } from 'next/navigation';
@@ -55,37 +55,37 @@ function ModelItem({ model, update }: { model: Model, update: () => Promise<void
       </TableCell>
       <TableCell>{model.reason}</TableCell>
       <TableCell>
-        <LoadingButton
-          onClick={handleLoad}
-          variant="contained"
-          disabled={isUnloading}
-          loading={isLoading}
-        >
-          {isReady ? 'Reload' : 'Load'}
-        </LoadingButton>
-        {isReady && (
-          <>
-            <Button
-              variant="contained"
-              color="primary"
-              className="ml-4"
-              onClick={() => router.push(`/models/${model.name}/versions/${model.version}/edit`)}
-              startIcon={<EditIcon />}
-            >
-              Edit
-            </Button>
-            <LoadingButton
-              onClick={handleUnload}
-              variant="contained"
-              color="warning"
-              className="ml-4"
-              disabled={isLoading}
-              loading={isUnloading}
-            >
-              Unload
-            </LoadingButton>
-          </>
-        )}
+        <Stack direction="row" spacing={2}>
+          <LoadingButton
+            onClick={handleLoad}
+            variant="contained"
+            disabled={isUnloading}
+            loading={isLoading}
+          >
+            {isReady ? 'Reload' : 'Load'}
+          </LoadingButton>
+          {isReady && (
+            <>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => router.push(`/models/${model.name}/versions/${model.version}/edit`)}
+                startIcon={<EditIcon />}
+              >
+                Edit
+              </Button>
+              <LoadingButton
+                onClick={handleUnload}
+                variant="contained"
+                color="warning"
+                disabled={isLoading}
+                loading={isUnloading}
+              >
+                Unload
+              </LoadingButton>
+            </>
+          )}
+        </Stack>
       </TableCell>
     </TableRow>
   );
