@@ -14,6 +14,36 @@ This project is built on top of Triton Inference Server HTTP API. It is not affi
 - Monitor models metrics.
 
 ## Installation
+
+### Docker
+Pull the image:
+```bash
+docker pull duyvd/triton-inference-server-web-ui
+```
+
+Run the container:
+```bash
+docker run -d --name triton-inference-server-web-ui \
+    -p 3000:3000 \
+    -e API_URL=<api-url> \
+    -e API_AUTH_HEADER=<api-auth-header> \
+    duyvd/triton-inference-server-web-ui
+```
+
+Where:
+- `<api-url>` is the URL of the HTTP server, usually on port 8000.
+- `<api-auth-header>` is optional, if your Triton Inference Server is protected by an authentication header.
+
+For local Triton Inference Server, you can use the following command:
+```bash
+docker run -it --name triton-inference-server-web-ui \
+    -p 3000:3000 \
+    -e API_URL=http://localhost:8000 \
+    duyvd/triton-inference-server-web-ui
+```
+
+Finally, open your browser and go to http://localhost:3000.
+
 ### Build from source
 
 Prerequisites:
