@@ -3,7 +3,7 @@
 import ModelItem from '@/components/ModelItem';
 import TableRowsLoader from '@/components/TableRowsLoader';
 import { Model } from '@/types/model';
-import { Container, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, TableSortLabel } from '@mui/material';
+import { Container, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, TableSortLabel, TextField, Stack } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 
 function App() {
@@ -11,6 +11,7 @@ function App() {
   const [loading, setLoading] = useState<boolean>(true);
   const [sortColumn, setSortColumn] = useState<keyof Model>('name');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+  const [searchTerm, setSearchTerm] = useState<string>('');
 
   async function getModels() {
     const res = await fetch('/api/models', { method: 'POST' });
@@ -35,6 +36,10 @@ function App() {
     }
   }
 
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value);
+  }
+
   const sortedModels = models.sort((a, b) => {
     const columnA = a[sortColumn] || '';
     const columnB = b[sortColumn] || '';
@@ -42,11 +47,21 @@ function App() {
       return sortDirection === 'asc' ? -1 : 1;
     }
     return sortDirection === 'asc' ? 1 : -1;
+  }).filter((model) => {
+    return model.name.toLowerCase().includes(searchTerm.toLowerCase());
   });
 
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-      <Typography variant="h5" gutterBottom>Models</Typography>
+      <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
+        <Typography variant="h5">Models</Typography>
+        <TextField
+          label="Search models"
+          variant="outlined"
+          value={searchTerm}
+          onChange={handleSearch}
+        />
+      </Stack>
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
