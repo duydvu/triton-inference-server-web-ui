@@ -55,6 +55,7 @@ function ModelItem({ model, update }: { model: Model, update: () => Promise<void
       <TableCell>
         <Chip color={badgeColor} label={badgeText} clickable />
       </TableCell>
+      <TableCell>{model.reason}</TableCell>
       <TableCell>
         <LoadingButton
           onClick={handleLoad}

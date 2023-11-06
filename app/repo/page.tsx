@@ -34,12 +34,13 @@ function App() {
               <TableCell>Name</TableCell>
               <TableCell>Version</TableCell>
               <TableCell>Status</TableCell>
+              <TableCell>Reason</TableCell>
               <TableCell>Action</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {loading ? (
-              <TableRowsLoader rowsNum={3} columnsNum={4} />
+              <TableRowsLoader rowsNum={3} columnsNum={5} />
             ) : models.map((model, i) => (
               <ModelItem key={i} model={model} update={getModels} />
             ))}
