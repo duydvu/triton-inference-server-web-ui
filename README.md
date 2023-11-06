@@ -78,3 +78,7 @@ Run the server:
 ```bash
 npm start
 ```
+
+## License
+
+MIT License
