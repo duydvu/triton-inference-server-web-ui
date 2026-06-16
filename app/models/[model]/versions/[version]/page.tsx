@@ -18,7 +18,7 @@ function ModelView({ params }: { params: { model: string, version: string } }) {
   const handleUnload = async () => {
     setIsUnloading(true);
     try {
-      const res = await fetch(`/api/models/${model}/unload`, { method: 'POST' });
+      const res = await fetch(process.env.NEXT_PUBLIC_WEBUI_BASEPATH + `/api/models/${model}/unload`, { method: 'POST' });
     } catch (err) {
       console.error(err);
     }
@@ -29,7 +29,7 @@ function ModelView({ params }: { params: { model: string, version: string } }) {
   useEffect(() => {
     (async () => {
       setLoading(true);
-      const res = await fetch(`/api/models/${model}/versions/${version}`);
+      const res = await fetch(process.env.NEXT_PUBLIC_WEBUI_BASEPATH + `/api/models/${model}/versions/${version}`);
       const { config, stats } = await res.json();
       setConfig(config);
       setStats(stats);

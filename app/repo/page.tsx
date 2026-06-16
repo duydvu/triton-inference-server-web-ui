@@ -14,7 +14,7 @@ function App() {
   const [searchTerm, setSearchTerm] = useState<string>('');
 
   async function getModels() {
-    const res = await fetch('/api/models', { method: 'POST' });
+    const res = await fetch(process.env.NEXT_PUBLIC_WEBUI_BASEPATH + '/api/models', { method: 'POST' });
     const models = await res.json();
     setModels(models);
   }

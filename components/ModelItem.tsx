@@ -16,7 +16,7 @@ function ModelItem({ model, update }: { model: Model, update: () => Promise<void
   const handleLoad = async () => {
     setIsLoading(true);
     try {
-      const res = await fetch(`/api/models/${model.name}/load`, { method: 'POST' });
+      const res = await fetch(process.env.NEXT_PUBLIC_WEBUI_BASEPATH + `/api/models/${model.name}/load`, { method: 'POST' });
     } catch (err) {
       console.error(err);
     }
@@ -27,7 +27,7 @@ function ModelItem({ model, update }: { model: Model, update: () => Promise<void
   const handleUnload = async () => {
     setIsUnloading(true);
     try {
-      const res = await fetch(`/api/models/${model.name}/unload`, { method: 'POST' });
+      const res = await fetch(process.env.NEXT_PUBLIC_WEBUI_BASEPATH + `/api/models/${model.name}/unload`, { method: 'POST' });
     } catch (err) {
       console.error(err);
     }

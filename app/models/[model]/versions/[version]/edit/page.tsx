@@ -17,7 +17,7 @@ function ModelView({ params }: { params: { model: string, version: string } }) {
   const save = async () => {
     try {
       setSaving(true);
-      const res = await fetch(`/api/models/${model}/load`, {
+      const res = await fetch(process.env.NEXT_PUBLIC_WEBUI_BASEPATH + `/api/models/${model}/load`, {
         method: 'POST',
         body: JSON.stringify({
           parameters: {
@@ -40,7 +40,7 @@ function ModelView({ params }: { params: { model: string, version: string } }) {
   useEffect(() => {
     (async () => {
       setLoading(true);
-      const res = await fetch(`/api/models/${model}/versions/${version}`);
+      const res = await fetch(process.env.NEXT_PUBLIC_WEBUI_BASEPATH + `/api/models/${model}/versions/${version}`);
       const { config } = await res.json();
       setConfig(JSON.stringify(config, null, 4));
       setLoading(false);
