@@ -1,5 +1,4 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
 import './globals.css'
 
 import '@fontsource/roboto/300.css'
@@ -8,8 +7,6 @@ import '@fontsource/roboto/500.css'
 import '@fontsource/roboto/700.css'
 
 import AppBar from '@/components/AppBar'
-
-const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: 'Triton Inference Server Web UI',
@@ -23,7 +20,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body>
         <AppBar />
         {children}
       </body>
