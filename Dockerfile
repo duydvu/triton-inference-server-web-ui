@@ -18,6 +18,12 @@ RUN \
 
 # Rebuild the source code only when needed
 FROM base AS builder
+
+# Variable can be used to set custom base path 
+# (default is empty, to serve on root "/")
+ARG NEXT_PUBLIC_WEBUI_BASEPATH=""
+ENV NEXT_PUBLIC_WEBUI_BASEPATH=${NEXT_PUBLIC_WEBUI_BASEPATH}
+
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
